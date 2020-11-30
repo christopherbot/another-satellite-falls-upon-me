@@ -67,11 +67,20 @@ function helpers.randomizeCapitalization(str)
 end
 
 function helpers.setColor(r, g, b, a)
-  love.graphics.setColor(r / 255, g / 255, b / 255, (a or 255) / 255)
+  -- Expect alpha between 0-1 instead of 0-255
+  -- becase it makes more sense to me that way
+  love.graphics.setColor(r / 255, g / 255, b / 255, (a or 1))
 end
 
 function helpers.resetColor()
   love.graphics.setColor(1, 1, 1)
+end
+
+function helpers.cancelTimer(timerTag)
+  if timerTag then
+    timer:cancel(timerTag)
+    timerTag = nil
+  end
 end
 
 return helpers

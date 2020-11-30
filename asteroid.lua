@@ -49,6 +49,7 @@ function Asteroid:initialize()
   self.y = -self.height
   self.angle = 0
   self.speed = math.random(100, 300)
+  self.opacity = 1
 
   self.quad = love.graphics.newQuad(
     asteroid.sheet_x,
@@ -59,7 +60,7 @@ function Asteroid:initialize()
     celestial_objects_sheet:getHeight()
   )
 
-  -- duck-typing (quack)
+  -- quack
   self.shape = asteroid.diameter and
     collider:circle(
       self.x,
@@ -82,12 +83,18 @@ function Asteroid:update(dt)
     self.angle = self.angle + self.speed / 20
   end
 
-  self.shape:moveTo(self.x, self.y)
-  self.shape:setRotation(math.rad(self.angle))
+  if self.shape then
+    self.shape:moveTo(self.x, self.y)
+    self.shape:setRotation(math.rad(self.angle))
+  end
 end
 
 function Asteroid:draw()
-  self.shape:draw('line')
+  if self.shape then
+    self.shape:draw('line')
+  end
+
+  helpers.setColor(255, 255, 255, self.opacity)
   love.graphics.draw(
     celestial_objects_sheet,
     self.quad,
@@ -99,18 +106,36 @@ function Asteroid:draw()
     self.width / 2,
     self.height / 2
   )
+  helpers.resetColor()
+end
+
+function Asteroid:fade_out(done)
+  self.fade_out_timer = timer:tween(
+    0.2,
+    self,
+    { opacity = 0 },
+    'linear',
+    done
+  )
 end
 
 function Asteroid:isOffScreen()
   return self.x + self.width <= 0
 end
 
+function Asteroid:collidesWith(...)
+  if not self.shape then return false end
+
+  return self.shape:collidesWith(...)
+end
+
 function Asteroid:onCollide()
   -- ignore multiple hits at once
   if self.is_hit then return end
 
-  -- print('asteroid collide!')
   self.is_hit = true
+  collider:remove(self.shape)
+  self.shape = nil
 end
 
 return Asteroid

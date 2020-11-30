@@ -6,13 +6,15 @@ local max_y = love.graphics.getHeight() - min_y
 
 local OxygenTank = class('OxygenTank')
 
-function OxygenTank:initialize(x, y, speed)
+function OxygenTank:initialize(options)
+  self.options = options or {}
   self.width = oxygen_tank_image:getWidth()
   self.height = oxygen_tank_image:getHeight()
   self.x = love.graphics.getWidth() + self.width / 2
-  self.y = math.random(min_y, max_y)
+  self.y = self.options.y or math.random(min_y, max_y)
   self.angle = math.random(0, 359)
-  self.speed = math.random(50, 200)
+  self.speed = self.options.speed or math.random(50, 200)
+  self.opacity = 1
 
   -- todo better hitbox
   self.shape = collider:rectangle(
@@ -32,12 +34,18 @@ function OxygenTank:update(dt)
     self.angle = self.angle + self.speed / 100
   end
 
-  self.shape:moveTo(self.x, self.y)
-  self.shape:setRotation(math.rad(self.angle))
+  if self.shape then
+    self.shape:moveTo(self.x, self.y)
+    self.shape:setRotation(math.rad(self.angle))
+  end
 end
 
 function OxygenTank:draw()
-  self.shape:draw('line')
+  if self.shape then
+    self.shape:draw('line')
+  end
+
+  helpers.setColor(255, 255, 255, self.opacity)
   love.graphics.draw(
     oxygen_tank_image,
     self.x,
@@ -48,10 +56,27 @@ function OxygenTank:draw()
     self.width / 2,
     self.height / 2
   )
+  helpers.resetColor()
+end
+
+function OxygenTank:fade_out(done)
+  self.fade_out_timer = timer:tween(
+    0.2,
+    self,
+    { opacity = 0 },
+    'linear',
+    done
+  )
 end
 
 function OxygenTank:isOffScreen()
   return self.x + self.width <= 0
+end
+
+function OxygenTank:collidesWith(...)
+  if not self.shape then return false end
+
+  return self.shape:collidesWith(...)
 end
 
 function OxygenTank:onCollide(removeTank)

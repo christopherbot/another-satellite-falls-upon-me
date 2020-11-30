@@ -1,18 +1,20 @@
 local class = require('libraries.middleclass')
 local helpers = require('helpers')
 
-local min_y = 150
-local max_y = love.graphics.getHeight() - min_y
+local min_y = 0
+local max_y = love.graphics.getHeight()
 
 local Ring = class('Ring')
 
-function Ring:initialize(x, y, speed)
+function Ring:initialize(options)
+  self.options = options or {}
   self.width = 64
   self.height = 64
   self.x = love.graphics.getWidth() + self.width / 2
-  self.y = math.random(min_y, max_y)
+  self.y = self.options.y or math.random(min_y, max_y)
   self.angle = 0
-  self.speed = math.random(100, 300)
+  self.speed = self.options.speed or math.random(100, 350)
+  self.opacity = 1
 
   -- celestial_objects_sheet has a 4x3 grid of
   -- 64x64 planets, so pick one at random:
@@ -40,12 +42,18 @@ function Ring:update(dt)
     self.angle = self.angle + self.speed / 20
   end
 
-  self.shape:moveTo(self.x, self.y)
-  self.shape:setRotation(math.rad(self.angle))
+  if self.shape then
+    self.shape:moveTo(self.x, self.y)
+    self.shape:setRotation(math.rad(self.angle))
+  end
 end
 
 function Ring:draw()
-  self.shape:draw('line')
+  if self.shape then
+    self.shape:draw('line')
+  end
+
+  helpers.setColor(255, 255, 255, self.opacity)
   love.graphics.draw(
     celestial_objects_sheet,
     self.quad,
@@ -57,18 +65,36 @@ function Ring:draw()
     self.width / 2,
     self.height / 2
   )
+  helpers.resetColor()
+end
+
+function Ring:fade_out(done)
+  self.fade_out_timer = timer:tween(
+    0.2,
+    self,
+    { opacity = 0 },
+    'linear',
+    done
+  )
 end
 
 function Ring:isOffScreen()
   return self.x + self.width <= 0
 end
 
+function Ring:collidesWith(...)
+  if not self.shape then return false end
+
+  return self.shape:collidesWith(...)
+end
+
 function Ring:onCollide()
   -- ignore multiple hits at once
   if self.is_hit then return end
 
-  -- print('ring collide!')
   self.is_hit = true
+  collider:remove(self.shape)
+  self.shape = nil
 end
 
 return Ring

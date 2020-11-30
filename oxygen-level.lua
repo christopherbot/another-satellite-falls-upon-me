@@ -7,7 +7,10 @@ local padding_from_edge = 20
 local rate_of_decrease = 4
 local max_oxygen_level = 165
 
-function OxygenLevel:initialize(x, y, speed)
+function OxygenLevel:initialize(options)
+  -- options = options or {}
+  -- self.opacity = options.opacity or 1
+  self.opacity = 0
   self.image_width = tall_transparent_oxygen_tank_image:getWidth()
   self.image_height = tall_transparent_oxygen_tank_image:getHeight()
   self.image_x = padding_from_edge
@@ -17,9 +20,12 @@ function OxygenLevel:initialize(x, y, speed)
   self.level_width = 52
   self.oxygen_level = max_oxygen_level
   self.next_oxygen_level = max_oxygen_level
+  self.should_decrease = false
 end
 
 function OxygenLevel:update(dt)
+  if not self.should_decrease then return end
+
   if self.oxygen_level > 0 then
     self.oxygen_level = math.max(self.oxygen_level - dt * rate_of_decrease, 0)
   end
@@ -31,7 +37,7 @@ end
 
 function OxygenLevel:draw()
   -- transparent background
-  helpers.setColor(255, 140, 0, 40)
+  helpers.setColor(255, 140, 0, self.opacity * 0.15)
   love.graphics.rectangle(
     'fill',
     self.level_x,
@@ -41,7 +47,7 @@ function OxygenLevel:draw()
   )
 
   -- next level preview
-  helpers.setColor(255, 25, 0)
+  helpers.setColor(255, 25, 0, self.opacity)
   love.graphics.rectangle(
     'fill',
     self.level_x,
@@ -51,7 +57,7 @@ function OxygenLevel:draw()
   )
 
   -- current level
-  helpers.setColor(255, 140, 0)
+  helpers.setColor(255, 140, 0, self.opacity)
   love.graphics.rectangle(
     'fill',
     self.level_x,
@@ -59,9 +65,9 @@ function OxygenLevel:draw()
     self.level_width,
     self.oxygen_level
   )
-  helpers.resetColor()
 
   -- overlay the tank image on top
+  helpers.setColor(255, 255, 255, self.opacity)
   love.graphics.draw(
     tall_transparent_oxygen_tank_image,
     self.image_x,
@@ -72,28 +78,75 @@ function OxygenLevel:draw()
     -- self.width / 2,
     -- self.height / 2
   )
+
+  helpers.resetColor()
 end
 
-function OxygenLevel:increase(level)
-  timer:tween(
+function OxygenLevel:fade_in(duration, done)
+  self.fade_in_timer = timer:tween(
+    duration,
+    self,
+    { opacity = 1 },
+    'linear',
+    done
+  )
+end
+
+function OxygenLevel:start_decreasing()
+  self.should_decrease = true
+end
+
+function OxygenLevel:stop_decreasing()
+  self.should_decrease = false
+end
+
+function OxygenLevel:increase(amount)
+  amount = amount or 25
+  self.increase_timer = timer:tween(
     0.05,
     self,
     { next_oxygen_level = math.min(self.next_oxygen_level + 25, max_oxygen_level) },
     'out-sine',
     function()
-      timer:after(0.5, function()
-        timer:tween(
+      self.increase_timer = timer:after(0.5, function()
+        self.increase_timer = timer:tween(
           0.5,
           self,
           { oxygen_level = math.min(self.next_oxygen_level, max_oxygen_level) },
           'out-sine',
           function()
-            -- print('done increasing oxygen')
           end
         )
       end)
     end
   )
+end
+
+function OxygenLevel:decrease(amount)
+  amount = amount or 25
+  self.decrease_timer = timer:tween(
+    0.05,
+    self,
+    { oxygen_level = math.max(self.oxygen_level - amount, 0) },
+    'out-sine',
+    function()
+      self.decrease_timer = timer:after(0.5, function()
+        self.decrease_timer = timer:tween(
+          0.5,
+          self,
+          { next_oxygen_level = math.max(self.oxygen_level, 0) },
+          'out-sine',
+          function()
+          end
+        )
+      end)
+    end
+  )
+end
+
+function OxygenLevel:destroy()
+  helpers.cancelTimer(self.fade_in_timer)
+  helpers.cancelTimer(self.increase_timer)
 end
 
 return OxygenLevel
