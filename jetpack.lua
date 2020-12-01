@@ -26,6 +26,11 @@ function Jetpack:update(dt)
     self.y = self.cy + self.circling_radius * math.sin(self.circling_angle)
 
     self.circling_angle = self.circling_angle + math.pi * dt
+
+    if self.is_usable and player then
+      self.circling_angle = self.circling_angle + math.pi * dt * player.boost_distance / 40
+      self.circling_radius = player.boost_distance / 5
+    end
   end
 
   if self.is_moving_towards_player then
@@ -78,7 +83,6 @@ function Jetpack:start_circling(done)
             self.is_circling = true
             self.is_visible = false
             self.is_usable = true
-            self.circling_radius = 50
             done()
           end
         )

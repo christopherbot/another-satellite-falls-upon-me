@@ -156,7 +156,7 @@ function Room1:update(dt)
       timer:after(3, function()
         player:say("Ugh, that debris punctured my tank.\nI’ll run out of oxygen soon.", 2.5)
         timer:after(3, function()
-          player:say("Where’s all my gear? If I can find it,\nI’ll make it to the ship sooner.")
+          player:say("Where’s all my gear?\nFinding it will make this journey easier.")
           timer:after(4, function()
             controls:show()
             player:endSpeech()
@@ -180,10 +180,14 @@ function Room1:update(dt)
       player:disable_control()
       oxygen_level:stop_decreasing()
       jetpack:stop_moving()
-      player:say("My jetpack! Now I can launch myself upwards.")
+      player:say(
+        "My jetpack! Now I can launch myself upwards.\n\n"..
+        "With enough momentum, I should be able to\n"..
+        "break through the debris.",
+        8
+      )
       player:move_to({ x = jetpack.x, y = jetpack.y }, function()
         jetpack:start_circling(function()
-          player:endSpeech()
           player:enable_control()
           player:enable_boost()
           oxygen_level:start_decreasing()
@@ -211,7 +215,7 @@ function Room1:update(dt)
       player:disable_control()
       oxygen_level:stop_decreasing()
       thrusters:stop_moving()
-      player:say("Some fuel for my rocket thrusters!\nThis’ll help me move faster.")
+      player:say("Some fuel for my rocket thrusters!\n\nThis’ll allow me to burst forward in a pinch.")
       player:move_to({ x = thrusters.x, y = thrusters.y }, function()
         thrusters:start_circling(function()
           player:endSpeech()
@@ -234,7 +238,7 @@ function Room1:update(dt)
   if space_shuttle then
     space_shuttle:update(dt)
 
-    if space_shuttle:is_at_scale(0.5) and not self.is_shuttle_in_sight then
+    if space_shuttle:is_at_scale(0.4) and not self.is_shuttle_in_sight then
       self.is_shuttle_in_sight = true
       player:say("Is that the shuttle?")
       timer:after(3, function()
@@ -320,7 +324,7 @@ function Room1:update(dt)
     planet:update(dt)
 
     if planet:collidesWith(player.shape) then
-      if player:onCollide() then
+      if player:onCollide(planet) then
         planet:onCollide()
         oxygen_level:decrease(10)
       end
@@ -335,7 +339,7 @@ function Room1:update(dt)
     asteroid:update(dt)
 
     if asteroid:collidesWith(player.shape) then
-      if player:onCollide() then
+      if player:onCollide(asteroid) then
         asteroid:onCollide()
         oxygen_level:decrease(8)
       end

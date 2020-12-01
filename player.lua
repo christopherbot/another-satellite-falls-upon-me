@@ -18,6 +18,7 @@ local dive_distance_rate = 15
 local dive_cooldown_duration = 1
 local shape_size_adj = 25
 local shape_y_adj = 15
+local powerful_boost_amount = 200
 
 local boost_states = {
   idle = 'idle',
@@ -53,7 +54,7 @@ function Player:initialize()
   self.width = self.current_image:getWidth()
   self.height = self.current_image:getHeight()
   self.x = -self.width * player_scale / 2
-  self.y = (max_y + min_y) / 2
+  self.y = (max_y + min_y) / 2 + 35
   self.angle = 0
 
   -- TODO use polygon to improve hit box
@@ -133,8 +134,9 @@ function Player:update(dt)
         function()
           -- TODO cooldown animation? maybe near keyboard image?
           self.boost_state = boost_states.cooldown
-          timer:after(self.boost_distance / 100, function()
-            self.boost_distance = 0
+          local prev_boost_distance = self.boost_distance
+          self.boost_distance = 0
+          timer:after(prev_boost_distance / 100, function()
             self.boost_state = boost_states.idle
           end)
         end
@@ -224,6 +226,10 @@ function Player:draw()
     self.shape:draw('line')
   end
 
+  if self.boost_distance >= powerful_boost_amount then
+    helpers.setColor(245, 170, 60, 1)
+  end
+
   love.graphics.draw(
     self.current_image,
     self.x,
@@ -234,6 +240,10 @@ function Player:draw()
     self.width / 2,
     self.height / 2
   )
+
+  if self.boost_distance >= powerful_boost_amount then
+    helpers.resetColor()
+  end
 
   if self.text then
     love.graphics.print(
@@ -325,7 +335,12 @@ function Player:collidesWith(...)
   return self.shape:collidesWith(...)
 end
 
-function Player:onCollide()
+function Player:onCollide(collided_object)
+  if self.boost_distance >= powerful_boost_amount and collided_object.fade_out then
+    collided_object:fade_out()
+    return true
+  end
+
   -- ignore multiple hits at once and add short invincibility
   if self.is_hit or self.is_invincible then return false end
 
@@ -370,7 +385,7 @@ function Player:onCollide()
     jetpack:hide()
     self.boost_distance = 0
     self.boost_state = boost_states.idle
-  elseif self.boost_state == boost_states.boosting and self.boost_distance < 200 then
+  elseif self.boost_state == boost_states.boosting and self.boost_distance < powerful_boost_amount then
     timer:cancel(self.boosting_timer)
     self.boost_distance = 0
     self.boost_state = boost_states.idle

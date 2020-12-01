@@ -12,7 +12,6 @@ function SpaceShuttle:initialize()
   self.is_growing = true
   self.is_moving_towards_player = true
   self.scale = 0.05
-  self.scale = 1
 end
 
 function SpaceShuttle:update(dt)
