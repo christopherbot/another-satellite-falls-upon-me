@@ -103,6 +103,7 @@ function Player:update(dt)
       self.boost_state == boost_states.idle and
       helpers.isDirectionKeyDown('up')
     then
+      whoosh_sound:play()
       jetpack:show()
       self.boost_state = boost_states.charging
       self.boost_angle_correction_tween = timer:tween(
@@ -283,6 +284,7 @@ function Player:keypressed(key)
     self.dive_state == dive_states.idle and
     helpers.isDirectionKey('down', key)
   then
+    thrust_sound:play()
     self.dive_state = dive_states.diving
     self:enable_rocket_fire()
 
@@ -344,6 +346,7 @@ end
 
 function Player:onCollide(collided_object)
   if self.boost_distance >= powerful_boost_amount and collided_object.fade_out then
+    break_sound:play()
     collided_object:fade_out()
     return true
   end
@@ -430,6 +433,7 @@ function Player:move_to(options, done)
 end
 
 function Player:collectOxygen()
+  blip_sound:play()
 end
 
 function Player:enable_boost()

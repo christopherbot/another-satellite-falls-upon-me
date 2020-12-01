@@ -131,6 +131,7 @@ function Room1:update(dt)
     self.intro_planet:update(dt)
 
     if self.intro_planet:collidesWith(player.shape) then
+      hit_sound:play()
       self.intro_planet:onCollide()
       oxygen_level:decrease()
       player:onCollide()
@@ -194,6 +195,7 @@ function Room1:update(dt)
         8
       )
       player:move_to({ x = jetpack.x, y = jetpack.y }, function()
+        achievement_sound:play()
         jetpack:start_circling(function()
           player:enable_control()
           player:enable_boost()
@@ -224,6 +226,7 @@ function Room1:update(dt)
       thrusters:stop_moving()
       player:say("Some fuel for my rocket thrusters!\n\nThis’ll allow me to burst forward in a pinch.")
       player:move_to({ x = thrusters.x, y = thrusters.y }, function()
+        achievement_sound:play()
         thrusters:start_circling(function()
           player:endSpeech()
           player:enable_control()
@@ -332,6 +335,7 @@ function Room1:update(dt)
 
     if planet:collidesWith(player.shape) then
       if player:onCollide(planet) then
+        hit_sound:play()
         planet:onCollide()
         oxygen_level:decrease(10)
       end
@@ -347,6 +351,7 @@ function Room1:update(dt)
 
     if asteroid:collidesWith(player.shape) then
       if player:onCollide(asteroid) then
+        small_hit_sound:play()
         asteroid:onCollide()
         oxygen_level:decrease(8)
       end

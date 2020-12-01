@@ -68,6 +68,20 @@ function love.load()
 
   -- audio
   -- Note: the music is played in title.lua to sync it with the title copy
+  blip_sound = love.audio.newSource('sound/blip.wav', 'static')
+  blip_sound:setVolume(0.3)
+  achievement_sound = love.audio.newSource('sound/achievement.wav', 'static')
+  achievement_sound:setVolume(0.4)
+  small_hit_sound = love.audio.newSource('sound/small-hit.wav', 'static')
+  small_hit_sound:setVolume(0.5)
+  hit_sound = love.audio.newSource('sound/hit.wav', 'static')
+  hit_sound:setVolume(0.3)
+  break_sound = love.audio.newSource('sound/break.wav', 'static')
+  break_sound:setVolume(0.4)
+  whoosh_sound = love.audio.newSource('sound/whoosh.wav', 'static')
+  whoosh_sound:setVolume(0.3)
+  thrust_sound = love.audio.newSource('sound/thrust.wav', 'static')
+  thrust_sound:setVolume(0.3)
   music = love.audio.newSource('sound/into-space.ogg', 'stream')
   music:setLooping(true)
   audio_enabled = true
