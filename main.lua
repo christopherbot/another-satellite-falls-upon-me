@@ -5,6 +5,9 @@ GAME_TITLE       = 'Another Satellite Falls Upon Me'
 GAME_TITLE_ALT_1 = ' not               al     on  e'
 GAME_TITLE_ALT_2 = '         a  ll     al     on  e'
 
+FONT_SIZE = 20
+SMALL_FONT_SIZE = 17
+
 local helpers = require('helpers')
 local Title = require('title')
 local Room1 = require('room1')
@@ -38,6 +41,7 @@ function love.load()
   space_shuttle_image = love.graphics.newImage('images/space-shuttle.png')
   sound_image = love.graphics.newImage('images/sound.png')
   no_sound_image = love.graphics.newImage('images/no-sound.png')
+  arrow_keys_image = love.graphics.newImage('images/arrow-keys.png')
 
   -- settings
   love.window.setMode(1130, 640)
@@ -57,7 +61,8 @@ function love.load()
   background:initialize()
 
   -- fonts
-  font = love.graphics.newFont('fonts/Share-TechMono.ttf', 20)
+  font = love.graphics.newFont('fonts/Share-TechMono.ttf', FONT_SIZE)
+  small_font = love.graphics.newFont('fonts/Share-TechMono.ttf', SMALL_FONT_SIZE)
   love.graphics.setFont(font)
 
   -- audio
@@ -135,6 +140,7 @@ function love.keypressed(key)
     end
     current_game_state = game_states.intro
     current_room_index = 1
+    next_room = ROOMS[current_room_index]
   end
 
   if key == 'return' then
@@ -142,15 +148,16 @@ function love.keypressed(key)
       toggle_pause()
     else
       current_room_index = current_room_index + 1
+      next_room = ROOMS[current_room_index]
     end
   end
-
-  next_room = ROOMS[current_room_index]
 
   if next_room and next_room ~= current_room then
     current_room:destroy()
     next_room:initialize()
     current_room = next_room
+  elseif next_room and next_room == current_room and current_room.reset then
+    current_room:reset()
   end
 
   if current_room.keypressed then

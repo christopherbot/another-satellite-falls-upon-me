@@ -2,13 +2,12 @@ local class = require('libraries.middleclass')
 local helpers = require('helpers')
 
 local SoundIcon = class('SoundIcon')
-local padding = 20
 
 function SoundIcon:initialize()
   self.width = sound_image:getWidth()
   self.height = sound_image:getHeight()
-  self.x = love.graphics.getWidth() - self.width - padding
-  self.y = love.graphics.getHeight() - self.height - padding
+  self.x = love.graphics.getWidth() - 60
+  self.y = love.graphics.getHeight() - 80
 end
 
 function SoundIcon:update(dt)
@@ -22,8 +21,8 @@ function SoundIcon:draw()
   )
   love.graphics.print(
     '[m]',
-    self.x - 2 * padding,
-    self.y + 5
+    self.x,
+    self.y + 40
   )
 end
 

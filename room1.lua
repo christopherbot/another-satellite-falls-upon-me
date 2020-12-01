@@ -1,5 +1,6 @@
 local class = require('libraries.middleclass')
 local Player = require('player')
+local Controls = require('controls')
 local Ring = require('ring')
 local Asteroid = require('asteroid')
 local OxygenTank = require('oxygen-tank')
@@ -17,6 +18,9 @@ function Room1:initialize()
 
   player = Player:new()
   player:initialize()
+
+  controls = Controls:new()
+  controls:initialize()
 
   oxygen_level = OxygenLevel:new()
   oxygen_level:initialize()
@@ -345,6 +349,7 @@ function Room1:draw()
   end
 
   player:draw()
+  controls:draw()
   oxygen_level:draw()
 
   if self.intro_ring then

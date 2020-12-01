@@ -161,6 +161,15 @@ function Title:toggle_enter_copy()
   self.copy[15].should_display = not self.copy[15].should_display
 end
 
+function Title:reset()
+  helpers.cancelTimer(self.flash_enter_timer)
+  self.timer = 0
+  for i, v in pairs(self.copy) do
+    v.started = false
+    v.should_display = false
+  end
+end
+
 function Title:destroy()
   helpers.cancelTimer(self.flash_enter_timer)
   print('menu destroyed')
