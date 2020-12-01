@@ -1,8 +1,14 @@
 # Another Satellite Falls Upon Me
 
-A game written in [lua](https://www.lua.org/) using [LÖVE](https://love2d.org/wiki/Main_Page) for the GitHub Game Off 2020.
+👨‍🚀 🚀
 
-### Attributions
+A game written in [lua](https://www.lua.org/) using
+[LÖVE](https://love2d.org/wiki/Main_Page) for the GitHub Game Off 2020.
+
+Play as a lone astronaut in this short side-scrolling journey as you
+try to recover your equipment and make it back to your ship and crew.
+
+### Asset attributions
 
 Background made by [VECTORPIXELSTAR](https://vectorpixelstar.itch.io/space).
 
