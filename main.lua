@@ -90,9 +90,9 @@ function love.load()
   love.graphics.setFont(font)
 
   -- audio
+  -- Note: the music is played in title.lua to sync it with the title copy
   music = love.audio.newSource('sound/into-space.ogg', 'stream')
   music:setLooping(true)
-  music:play()
   audio_enabled = true
 end
 
