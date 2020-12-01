@@ -2,7 +2,7 @@ local class = require('libraries.middleclass')
 local GameTitle = require('game-title')
 local Player = require('player')
 local Controls = require('controls')
-local Ring = require('ring')
+local Planet = require('planet')
 local Asteroid = require('asteroid')
 local OxygenTank = require('oxygen-tank')
 local OxygenLevel = require('oxygen-level')
@@ -29,25 +29,25 @@ function Room1:initialize()
   oxygen_level = OxygenLevel:new()
   oxygen_level:initialize()
 
-  rings = {}
+  planets = {}
   asteroids = {}
   oxygen_tanks = {}
 end
 
-function Room1:start_creating_rings(every)
+function Room1:start_creating_planets(every)
   every = every or 1
-  self.new_ring_timer = timer:every(every, function()
-    local ring = Ring:new()
-    ring:initialize()
-    table.insert(rings, ring)
+  self.new_planet_timer = timer:every(every, function()
+    local planet = Planet:new()
+    planet:initialize()
+    table.insert(planets, planet)
   end)
 end
 
-function Room1:stop_rings()
-  helpers.cancelTimer(self.new_ring_timer)
-  for i, ring in ipairs(rings) do
-    ring:fade_out(function()
-      rings[i] = nil
+function Room1:stop_planets()
+  helpers.cancelTimer(self.new_planet_timer)
+  for i, planet in ipairs(planets) do
+    planet:fade_out(function()
+      planets[i] = nil
     end)
   end
 end
@@ -95,8 +95,8 @@ function Room1:update(dt)
       player:say("I need to get to the space shuttle.\nI hope the crew is alr--")
       timer:after(1, function()
         oxygen_level:fade_in(1, function()
-          self.intro_ring = Ring:new()
-          self.intro_ring:initialize({
+          self.intro_planet = Planet:new()
+          self.intro_planet:initialize({
             y = love.graphics.getHeight() / 2,
             speed = 400,
           })
@@ -113,18 +113,18 @@ function Room1:update(dt)
     player:enable_control()
     oxygen_level:start_decreasing()
     self:start_creating_oxygen_tanks()
-    self:start_creating_rings()
+    self:start_creating_planets()
   end
 
   game_title:update(dt)
   player:update(dt)
   oxygen_level:update(dt)
 
-  if self.intro_ring then
-    self.intro_ring:update(dt)
+  if self.intro_planet then
+    self.intro_planet:update(dt)
 
-    if self.intro_ring:collidesWith(player.shape) then
-      self.intro_ring:onCollide()
+    if self.intro_planet:collidesWith(player.shape) then
+      self.intro_planet:onCollide()
       oxygen_level:decrease()
       player:onCollide()
       player:say("Ouch! I should avoid getting hit.", 3)
@@ -140,8 +140,8 @@ function Room1:update(dt)
       end)
     end
 
-    if self.intro_ring:isOffScreen() then
-      self.intro_ring = nil
+    if self.intro_planet:isOffScreen() then
+      self.intro_planet = nil
     end
   end
 
@@ -156,7 +156,7 @@ function Room1:update(dt)
       timer:after(3, function()
         player:say("Ugh, that debris punctured my tank.\nI’ll run out of oxygen soon.", 2.5)
         timer:after(3, function()
-          player:say("Where’s all my gear? If I find it,\nI’ll make it to the ship sooner.")
+          player:say("Where’s all my gear? If I can find it,\nI’ll make it to the ship sooner.")
           timer:after(4, function()
             controls:show()
             player:endSpeech()
@@ -176,7 +176,7 @@ function Room1:update(dt)
     if jetpack:is_at_x(player.x) and current_game_state == game_states.level1 then
       current_game_state = game_states.get_boost
       self:stop_oxygen_tanks()
-      self:stop_rings()
+      self:stop_planets()
       player:disable_control()
       oxygen_level:stop_decreasing()
       jetpack:stop_moving()
@@ -188,7 +188,7 @@ function Room1:update(dt)
           player:enable_boost()
           oxygen_level:start_decreasing()
           self:start_creating_oxygen_tanks()
-          self:start_creating_rings()
+          self:start_creating_planets()
           self:start_creating_asteroids()
 
           thrusters = Thrusters:new()
@@ -206,7 +206,7 @@ function Room1:update(dt)
     if thrusters:is_at_x(player.x) and current_game_state == game_states.level2 then
       current_game_state = game_states.get_dive
       self:stop_oxygen_tanks()
-      self:stop_rings()
+      self:stop_planets()
       self:stop_asteroids()
       player:disable_control()
       oxygen_level:stop_decreasing()
@@ -219,7 +219,7 @@ function Room1:update(dt)
           player:enable_dive()
           oxygen_level:start_decreasing()
           self:start_creating_oxygen_tanks(3)
-          self:start_creating_rings()
+          self:start_creating_planets()
           self:start_creating_asteroids()
 
           space_shuttle = SpaceShuttle:new()
@@ -254,7 +254,7 @@ function Room1:update(dt)
     if space_shuttle:is_at_x(love.graphics.getWidth() / 2) and current_game_state == game_states.level3 then
       current_game_state = game_states.reach_shuttle
       self:stop_oxygen_tanks()
-      self:stop_rings()
+      self:stop_planets()
       self:stop_asteroids()
       player:disable_control()
       oxygen_level:stop_decreasing()
@@ -298,7 +298,7 @@ function Room1:update(dt)
 
                     oxygen_level:start_decreasing()
                     self:start_creating_oxygen_tanks(3)
-                    self:start_creating_rings()
+                    self:start_creating_planets()
                     self:start_creating_asteroids()
 
                     current_game_state = game_states.neverending
@@ -316,18 +316,18 @@ function Room1:update(dt)
     end
   end
 
-  for i, ring in ipairs(rings) do
-    ring:update(dt)
+  for i, planet in ipairs(planets) do
+    planet:update(dt)
 
-    if ring:collidesWith(player.shape) then
+    if planet:collidesWith(player.shape) then
       if player:onCollide() then
-        ring:onCollide()
+        planet:onCollide()
         oxygen_level:decrease(10)
       end
     end
 
-    if ring:isOffScreen() then
-      table.remove(rings, i)
+    if planet:isOffScreen() then
+      table.remove(planets, i)
     end
   end
 
@@ -371,8 +371,8 @@ function Room1:draw()
   controls:draw()
   oxygen_level:draw()
 
-  if self.intro_ring then
-    self.intro_ring:draw()
+  if self.intro_planet then
+    self.intro_planet:draw()
   end
 
   if self.intro_oxygen_tank then
@@ -387,8 +387,8 @@ function Room1:draw()
     thrusters:draw()
   end
 
-  for _, ring in ipairs(rings) do
-    ring:draw()
+  for _, planet in ipairs(planets) do
+    planet:draw()
   end
 
   for _, asteroid in ipairs(asteroids) do
@@ -428,11 +428,11 @@ function Room1:destroy()
     space_shuttle = nil
   end
 
-  if self.intro_ring then
-    self.intro_ring = nil
+  if self.intro_planet then
+    self.intro_planet = nil
   end
 
-  helpers.cancelTimer(self.new_ring_timer)
+  helpers.cancelTimer(self.new_planet_timer)
   helpers.cancelTimer(self.new_asteroid_timer)
   helpers.cancelTimer(self.new_oxygen_tank_timer)
   helpers.cancelTimer(self.intro_tank_timer)

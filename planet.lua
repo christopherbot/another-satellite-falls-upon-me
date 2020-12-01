@@ -4,9 +4,9 @@ local helpers = require('helpers')
 local min_y = 0
 local max_y = love.graphics.getHeight()
 
-local Ring = class('Ring')
+local Planet = class('Planet')
 
-function Ring:initialize(options)
+function Planet:initialize(options)
   self.options = options or {}
   self.width = 64
   self.height = 64
@@ -34,7 +34,7 @@ function Ring:initialize(options)
   )
 end
 
-function Ring:update(dt)
+function Planet:update(dt)
   self.x = self.x - dt * self.speed
   self.y = self.y - player.angle / 70
 
@@ -48,7 +48,7 @@ function Ring:update(dt)
   end
 end
 
-function Ring:draw()
+function Planet:draw()
   if self.shape then
     self.shape:draw('line')
   end
@@ -68,7 +68,7 @@ function Ring:draw()
   helpers.resetColor()
 end
 
-function Ring:fade_out(done)
+function Planet:fade_out(done)
   self.fade_out_timer = timer:tween(
     0.2,
     self,
@@ -78,17 +78,17 @@ function Ring:fade_out(done)
   )
 end
 
-function Ring:isOffScreen()
+function Planet:isOffScreen()
   return self.x + self.width <= 0
 end
 
-function Ring:collidesWith(...)
+function Planet:collidesWith(...)
   if not self.shape then return false end
 
   return self.shape:collidesWith(...)
 end
 
-function Ring:onCollide()
+function Planet:onCollide()
   -- ignore multiple hits at once
   if self.is_hit then return end
 
@@ -97,4 +97,4 @@ function Ring:onCollide()
   self.shape = nil
 end
 
-return Ring
+return Planet
