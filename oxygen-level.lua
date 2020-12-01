@@ -7,9 +7,7 @@ local padding_from_edge = 20
 local rate_of_decrease = 4
 local max_oxygen_level = 165
 
-function OxygenLevel:initialize(options)
-  -- options = options or {}
-  -- self.opacity = options.opacity or 1
+function OxygenLevel:initialize()
   self.opacity = 0
   self.image_width = tall_transparent_oxygen_tank_image:getWidth()
   self.image_height = tall_transparent_oxygen_tank_image:getHeight()

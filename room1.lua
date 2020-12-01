@@ -16,8 +16,6 @@ function Room1:initialize()
   print('room1 initialized')
   collider = HC(100)
 
-  name = 'joe'
-
   background = Background:new()
   background:initialize()
 
@@ -28,7 +26,6 @@ function Room1:initialize()
   oxygen_level:initialize()
 
   rings = {}
-  -- total_rings = 0
   asteroids = {}
   oxygen_tanks = {}
 end
@@ -39,7 +36,6 @@ function Room1:start_creating_rings(every)
     local ring = Ring:new()
     ring:initialize()
     table.insert(rings, ring)
-    -- total_rings = total_rings + 1
   end)
 end
 
@@ -111,7 +107,6 @@ function Room1:update(dt)
     self:start_creating_rings()
   end
 
-  -- collider:update(dt)
   background:update(dt)
   player:update(dt)
   oxygen_level:update(dt)
@@ -338,9 +333,6 @@ function Room1:update(dt)
     tank:update(dt)
 
     if tank:collidesWith(player.shape) then
-      -- tank:onCollide(function()
-      --   table.remove(oxygen_tanks, i)
-      -- end)
       table.remove(oxygen_tanks, i)
       player:collectOxygen()
       oxygen_level:increase()
@@ -423,7 +415,6 @@ function Room1:destroy()
   helpers.cancelTimer(self.intro_tank_timer)
   helpers.cancelTimer(self.moving_around_shuttle_timer)
 
-  -- total_rings = 0
   current_game_state = game_states.intro
 
   self.intro_started = false

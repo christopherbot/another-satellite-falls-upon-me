@@ -3,8 +3,6 @@ local helpers = require('helpers')
 
 local min_x = love.graphics.getWidth() / 2
 local max_x = love.graphics.getWidth() * 1.5
--- local min_y = 150
--- local max_y = love.graphics.getHeight() - min_y
 
 local Asteroid = class('Asteroid')
 
@@ -43,8 +41,6 @@ function Asteroid:initialize()
   self.height = asteroid.height or asteroid.diameter
   self.shape_width = asteroid.shape_width or asteroid.shape_diameter
   self.shape_height = asteroid.shape_height or asteroid.shape_diameter
-  -- self.x = love.graphics.getWidth() + self.width / 2
-  -- self.y = math.random(min_y, max_y)
   self.x = math.random(min_x, max_x)
   self.y = -self.height
   self.angle = 0

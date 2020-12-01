@@ -1,13 +1,9 @@
 local class = require('libraries.middleclass')
 local helpers = require('helpers')
 
-local min_y = 150
-local max_y = love.graphics.getHeight() - min_y
-
 local Jetpack = class('Jetpack')
 
-function Jetpack:initialize(options)
-  self.options = options or {}
+function Jetpack:initialize()
   self.width = jetpack_image:getWidth()
   self.height = jetpack_image:getHeight()
   self.x = love.graphics.getWidth() + self.width / 2
@@ -102,9 +98,6 @@ end
 
 function Jetpack:destroy()
   helpers.cancelTimer(self.circling_timer)
-  -- self.is_moving_towards_player = true
-  -- self.is_circling = false
-  -- self.circling_angle = 0
 end
 
 return Jetpack

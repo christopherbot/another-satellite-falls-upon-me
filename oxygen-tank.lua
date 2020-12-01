@@ -83,7 +83,6 @@ function OxygenTank:onCollide(removeTank)
   -- ignore multiple hits at once
   if self.is_hit then return end
 
-  -- timer:after(1, function() removeTank() end)
   self.is_hit = true
 end
 

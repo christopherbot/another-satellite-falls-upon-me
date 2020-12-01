@@ -5,12 +5,10 @@ local Player = class('Player')
 
 local max_angle = 50
 local player_x = 150
--- local max_x = 300
 local min_y = 50
 local max_y = love.graphics.getHeight() - min_y
 local delta_angle = 3
 local player_scale = 0.1
--- local player_scale = 1
 local deg_per_y = 7
 local boost_angle_correction_duration = 0.15
 local max_boost_charge_duration = 1
@@ -183,17 +181,6 @@ function Player:update(dt)
     next_x = self.x + math.random(-shake_distance, shake_distance)
   elseif self.dive_state == dive_states.diving then
     next_x = self.x + dive_distance_rate
-    -- if not self.diving_tween_timer then
-    --   self.diving_tween_timer = timer:tween(
-    --     dive_duration,
-    --     self,
-    --     { x = 400 },
-    --     'out-sine',
-    --     function()
-    --       self.diving_tween_timer = nil
-    --     end
-    --   )
-    -- end
     next_y = self.y + self.angle * 0.4
   elseif self.dive_state == dive_states.returning then
     if not self.dive_returning_timer then
@@ -217,16 +204,12 @@ function Player:update(dt)
     next_y = self.y + self.angle / deg_per_y
   end
 
-  -- if next_x and not self.dive_returning_timer then
   if next_x and not self.diving_tween_timer and not self.dive_returning_timer then
     self.x = next_x
   end
   if next_y then
     self.y = helpers.clamp(next_y, min_y, max_y)
   end
-
-  -- add to x constantly, remove from x when colliding with breeze
-  -- x = helpers.clamp(x + (angle / 30), player_x, max_x)
 
   if self.shape then
     self.shape:moveTo(self.x, self.y)
@@ -235,7 +218,6 @@ function Player:update(dt)
 end
 
 function Player:draw()
-  -- outline for debugging:
   if self.shape then
     self.shape:draw('line')
   end
@@ -267,7 +249,6 @@ function Player:draw()
 
   if self.boost_state == boost_states.charging then
     love.graphics.setLineStyle('smooth')
-    -- love.graphics.setColor()
     love.graphics.line(
       self.x,
       self.y,
