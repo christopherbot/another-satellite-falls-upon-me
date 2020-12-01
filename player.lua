@@ -143,6 +143,7 @@ function Player:update(dt)
       )
     end
 
+    local _delta_angle = oxygen_level.oxygen_level == 0 and delta_angle / 3 or delta_angle
     if
       (self.boost_state == boost_states.idle or self.boost_state == boost_states.cooldown) and
       (
@@ -153,7 +154,7 @@ function Player:update(dt)
       helpers.isDirectionKeyDown('right') and
       self.angle < max_angle
     then
-      self.angle = math.min(self.angle + delta_angle, max_angle)
+      self.angle = math.min(self.angle + _delta_angle, max_angle)
     end
 
     if
@@ -166,7 +167,7 @@ function Player:update(dt)
       helpers.isDirectionKeyDown('left') and
       self.angle > -max_angle
     then
-        self.angle = math.max(self.angle - delta_angle, -max_angle)
+        self.angle = math.max(self.angle - _delta_angle, -max_angle)
     end
   end
 

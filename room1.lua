@@ -21,6 +21,9 @@ function Room1:initialize()
   game_title = GameTitle:new()
   game_title:initialize()
 
+  oxygen_level = OxygenLevel:new()
+  oxygen_level:initialize()
+
   player = Player:new()
   player:initialize()
 
@@ -31,9 +34,6 @@ function Room1:initialize()
   distance_tracker = DistanceTracker:new()
   distance_tracker:initialize()
   distance_tracker:fade_in()
-
-  oxygen_level = OxygenLevel:new()
-  oxygen_level:initialize()
 
   planets = {}
   asteroids = {}
