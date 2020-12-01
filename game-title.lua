@@ -12,7 +12,7 @@ function GameTitle:initialize()
 end
 
 function GameTitle:update(dt)
-  if not self.flicker_1 and current_game_state == game_states.level1 then
+  if not self.flicker_1 and current_game_state == game_states.level2 then
     self.flicker_1 = true
 
     self.flicker_timer_1 = timer:every({ 0.5, 5 }, function()

@@ -16,6 +16,8 @@ local boost_distance_charge_rate = (max_y - min_y) / 2
 local dive_duration = 0.4
 local dive_distance_rate = 15
 local dive_cooldown_duration = 1
+local shape_size_adj = 25
+local shape_y_adj = 15
 
 local boost_states = {
   idle = 'idle',
@@ -59,7 +61,7 @@ function Player:initialize()
     self.x,
     self.y,
     self.width * player_scale,
-    self.height * player_scale
+    self.height * player_scale - shape_size_adj
   )
 
   self.is_boosting_enabled = false
@@ -83,7 +85,7 @@ function Player:fade_in(duration, done)
     'linear',
     function()
       if self.shape then
-        self.shape:moveTo(self.x, self.y)
+        self.shape:moveTo(self.x, self.y - shape_y_adj)
         done()
       end
     end
@@ -212,7 +214,7 @@ function Player:update(dt)
   end
 
   if self.shape then
-    self.shape:moveTo(self.x, self.y)
+    self.shape:moveTo(self.x, self.y - shape_y_adj)
     self.shape:setRotation(math.rad(self.angle))
   end
 end
@@ -440,6 +442,7 @@ function Player:destroy()
   helpers.cancelTimer(self.text_timer)
   helpers.cancelTimer(self.move_to_timer)
   helpers.cancelTimer(self.disabling_control_timer)
+  self:endSpeech()
 end
 
 return Player

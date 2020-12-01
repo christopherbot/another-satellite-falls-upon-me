@@ -8,8 +8,7 @@ function SpaceShuttle:initialize()
   self.height = space_shuttle_image:getHeight()
   self.x = love.graphics.getWidth() + self.width / 2
   self.y = love.graphics.getHeight() / 2
-  -- self.speed = 10
-  self.speed = 500
+  self.speed = 14
   self.is_growing = true
   self.is_moving_towards_player = true
   self.scale = 0.05

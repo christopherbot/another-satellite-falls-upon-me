@@ -70,11 +70,6 @@ function OxygenLevel:draw()
     tall_transparent_oxygen_tank_image,
     self.image_x,
     self.image_y
-    -- math.rad(self.angle),
-    -- 1,
-    -- 1,
-    -- self.width / 2,
-    -- self.height / 2
   )
 
   helpers.resetColor()

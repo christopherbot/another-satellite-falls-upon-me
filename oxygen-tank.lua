@@ -16,7 +16,6 @@ function OxygenTank:initialize(options)
   self.speed = self.options.speed or math.random(50, 200)
   self.opacity = 1
 
-  -- todo better hitbox
   self.shape = collider:rectangle(
     self.x,
     self.y,

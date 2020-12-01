@@ -8,7 +8,7 @@ function Jetpack:initialize()
   self.height = jetpack_image:getHeight()
   self.x = love.graphics.getWidth() + self.width / 2
   self.y = love.graphics.getHeight() / 2
-  self.speed = 1000 -- 80
+  self.speed = 40
   self.is_moving_towards_player = true
   self.circling_radius = 100
   self.circling_angle = 0
@@ -29,7 +29,7 @@ function Jetpack:update(dt)
   end
 
   if self.is_moving_towards_player then
-    self.scale = math.min(self.scale + dt / 5, 1)
+    self.scale = math.min(self.scale + dt / 20, 1)
     self.x = self.x - dt * self.speed
   end
 end
@@ -67,8 +67,7 @@ function Jetpack:start_circling(done)
     'in-sine',
     function()
       self.is_circling = true
-      self.circling_timer = timer:after(0.4, function()
-      -- self.circling_timer = timer:after(4, function()
+      self.circling_timer = timer:after(4, function()
         self.is_circling = false
         self.circling_timer = timer:tween(
           0.5,

@@ -91,14 +91,19 @@ end
 function Room1:update(dt)
   if current_game_state == game_states.intro and not self.intro_started then
     self.intro_started = true
-    player:fade_in(1, function()
-      oxygen_level:fade_in(1, function()
-        self.intro_ring = Ring:new()
-        self.intro_ring:initialize({
-          y = love.graphics.getHeight() / 2,
-          speed = 1500,
-          -- speed = 400,
-        })
+    player:fade_in(3, function()
+      player:say("I need to get to the space shuttle.\nI hope the crew is alr--")
+      timer:after(1, function()
+        oxygen_level:fade_in(1, function()
+          self.intro_ring = Ring:new()
+          self.intro_ring:initialize({
+            y = love.graphics.getHeight() / 2,
+            speed = 400,
+          })
+          timer:after(0.7, function()
+            player:say("Yikes!", 1)
+          end)
+        end)
       end)
     end)
   end
@@ -122,16 +127,16 @@ function Room1:update(dt)
       self.intro_ring:onCollide()
       oxygen_level:decrease()
       player:onCollide()
-      player:say("Ouch! I should avoid getting hit, my oxygen will run out soon.")
-      self.intro_tank_timer = timer:after(0.3, function()
-      -- self.intro_tank_timer = timer:after(3, function()
+      player:say("Ouch! I should avoid getting hit.", 3)
+      self.intro_tank_timer = timer:after(3.5, function()
         self.intro_oxygen_tank = OxygenTank:new()
         self.intro_oxygen_tank:initialize({
           y = love.graphics.getHeight() / 2,
-          speed = 1500,
-          -- speed = 400,
+          speed = 300,
         })
-        player:say("Oh what's that coming this way..?")
+        timer:after(0.7, function()
+          player:say("I better catch that spare tank..!")
+        end)
       end)
     end
 
@@ -147,17 +152,19 @@ function Room1:update(dt)
       player:collectOxygen()
       oxygen_level:increase()
       self.intro_oxygen_tank = nil
-      player:say("This should help.")
-      timer:after(0.3, function()
-      -- timer:after(3, function()
-        player:say("I need to get to the space shuttle. Where’s all my gear?")
-        timer:after(0.3, function()
-        -- timer:after(3, function()
-          player:endSpeech()
-          jetpack = Jetpack:new()
-          jetpack:initialize()
+      player:say("This should help a bit.", 2)
+      timer:after(3, function()
+        player:say("Ugh, that debris punctured my tank.\nI’ll run out of oxygen soon.", 2.5)
+        timer:after(3, function()
+          player:say("Where’s all my gear? If I find it,\nI’ll make it to the ship sooner.")
+          timer:after(4, function()
+            controls:show()
+            player:endSpeech()
+            jetpack = Jetpack:new()
+            jetpack:initialize()
 
-          current_game_state = game_states.level1
+            current_game_state = game_states.level1
+          end)
         end)
       end)
     end
@@ -204,7 +211,7 @@ function Room1:update(dt)
       player:disable_control()
       oxygen_level:stop_decreasing()
       thrusters:stop_moving()
-      player:say("Some fuel for my rocket thrusters! This will help me move faster.")
+      player:say("Some fuel for my rocket thrusters!\nThis’ll help me move faster.")
       player:move_to({ x = thrusters.x, y = thrusters.y }, function()
         thrusters:start_circling(function()
           player:endSpeech()
@@ -230,12 +237,16 @@ function Room1:update(dt)
     if space_shuttle:is_at_scale(0.5) and not self.is_shuttle_in_sight then
       self.is_shuttle_in_sight = true
       player:say("Is that the shuttle?")
-      timer:after(0.3, function()
-      -- timer:after(3, function()
-        player:say("I've almost made it.")
-        timer:after(0.3, function()
-        -- timer:after(3, function()
-          player:endSpeech()
+      timer:after(3, function()
+        player:say("I’ve almost made it.")
+        timer:after(3, function()
+          player:say("Hang in there guys. I know you’re alright.")
+          timer:after(3, function()
+            player:say("I suppose I better hang in there too.")
+            timer:after(3, function()
+              player:endSpeech()
+            end)
+          end)
         end)
       end)
     end
@@ -254,7 +265,7 @@ function Room1:update(dt)
         y = space_shuttle.y - 20,
         duration = 2,
       }, function()
-        player:say("Nobodies here...")
+        player:say("Nobodies here...?")
         self.moving_around_shuttle_timer = timer:after(3, function()
           player:endSpeech()
           player:move_to({
@@ -270,17 +281,19 @@ function Room1:update(dt)
                 y = space_shuttle.y,
                 duration = 3,
               }, function()
-                player:say("I guess I’ll just keep going...")
+                player:say("I’m all alone..?")
                 space_shuttle:increase_speed()
                 space_shuttle:start_moving()
                 self.moving_around_shuttle_timer = timer:after(3, function()
-                  player:say("...")
+                  player:say("I guess I’ll just keep going...")
                   player:move_to({
                     x = 150,
                     y = love.graphics.getHeight() / 2,
                     duration = 8,
                   }, function()
-                    player:endSpeech()
+                    timer:after(3, function()
+                      player:say("...", 3)
+                    end)
                     player:enable_control()
 
                     oxygen_level:start_decreasing()

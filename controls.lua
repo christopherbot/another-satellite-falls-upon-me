@@ -9,12 +9,15 @@ function Controls:initialize()
   self.scale = 0.8
   self.x = love.graphics.getWidth() - 190
   self.y = love.graphics.getHeight() - 90
+  self.is_visible = false
 end
 
 function Controls:update(dt)
 end
 
 function Controls:draw()
+  if not self.is_visible then return end
+
   love.graphics.draw(
     arrow_keys_image,
     self.x,
@@ -48,8 +51,8 @@ function Controls:draw()
 
   if player.is_boosting_enabled then
     love.graphics.print(
-      'Jetpack',
-      self.x - 33,
+      'Jetpack (hold)',
+      self.x - 63,
       self.y - 71
     )
   end
@@ -63,6 +66,10 @@ function Controls:draw()
   end
 
   love.graphics.setFont(font)
+end
+
+function Controls:show()
+  self.is_visible = true
 end
 
 function Controls:destroy()
