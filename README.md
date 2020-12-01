@@ -16,4 +16,4 @@ Icons made by
 [smalllikeart](https://www.flaticon.com/authors/smalllikeart)
 from [www.flaticon.com](https://www.flaticon.com/).
 
-Sound effects from [Mixkit][https://mixkit.co/].
+Sound effects from [Mixkit](https://mixkit.co/).
