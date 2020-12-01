@@ -23,6 +23,9 @@ function SpaceShuttle:update(dt)
   if self.is_moving_towards_player then
     self.x = self.x - dt * self.speed
   end
+  if self.is_moving_downwards then
+    self.y = self.y - dt * self.speed / 4
+  end
 end
 
 function SpaceShuttle:draw()
@@ -52,6 +55,7 @@ end
 
 function SpaceShuttle:start_moving()
   self.is_moving_towards_player = true
+  self.is_moving_downwards = true
 end
 
 function SpaceShuttle:stop_moving()

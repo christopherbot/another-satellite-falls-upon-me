@@ -78,7 +78,7 @@ function helpers.setColor(r, g, b, a)
 end
 
 function helpers.resetColor()
-  love.graphics.setColor(1, 1, 1)
+  love.graphics.setColor(1, 1, 1, 1)
 end
 
 function helpers.cancelTimer(timerTag)

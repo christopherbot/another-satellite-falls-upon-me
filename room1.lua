@@ -269,7 +269,7 @@ function Room1:update(dt)
                 player:say("I guess I’ll just keep going...")
                 space_shuttle:increase_speed()
                 space_shuttle:start_moving()
-                self.moving_around_shuttle_timer = timer:after(2, function()
+                self.moving_around_shuttle_timer = timer:after(3, function()
                   player:say("...")
                   player:move_to({
                     x = 150,
@@ -403,6 +403,11 @@ function Room1:destroy()
   if thrusters then
     thrusters:destroy()
     thrusters = nil
+  end
+
+  if space_shuttle then
+    space_shuttle:destroy()
+    space_shuttle = nil
   end
 
   if self.intro_ring then
