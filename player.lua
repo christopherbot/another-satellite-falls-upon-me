@@ -224,7 +224,8 @@ end
 
 function Player:draw()
   if self.shape then
-    self.shape:draw('line')
+    -- for debugging:
+    -- self.shape:draw('line')
   end
 
   if self.boost_distance >= powerful_boost_amount then
@@ -269,13 +270,14 @@ function Player:draw()
   end
 
   if self.boost_state == boost_states.charging then
-    love.graphics.setLineStyle('smooth')
-    love.graphics.line(
-      self.x,
-      self.y,
-      self.x,
-      self.y - self.boost_distance
-    )
+    -- for debugging:
+    -- love.graphics.setLineStyle('smooth')
+    -- love.graphics.line(
+    --   self.x,
+    --   self.y,
+    --   self.x,
+    --   self.y - self.boost_distance
+    -- )
   end
 end
 

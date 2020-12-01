@@ -87,7 +87,8 @@ end
 
 function Asteroid:draw()
   if self.shape then
-    self.shape:draw('line')
+    -- for debugging:
+    -- self.shape:draw('line')
   end
 
   helpers.setColor(255, 255, 255, self.opacity)
