@@ -2,3 +2,5 @@ ideas/
 
 .DS_Store
 test.love
+*.love
+*.zip
