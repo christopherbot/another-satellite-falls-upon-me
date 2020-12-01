@@ -1,4 +1,5 @@
 local class = require('libraries.middleclass')
+local GameTitle = require('game-title')
 local Player = require('player')
 local Controls = require('controls')
 local Ring = require('ring')
@@ -15,6 +16,9 @@ local Room1 = class('Room1')
 function Room1:initialize()
   print('room1 initialized')
   collider = HC(100)
+
+  game_title = GameTitle:new()
+  game_title:initialize()
 
   player = Player:new()
   player:initialize()
@@ -107,6 +111,7 @@ function Room1:update(dt)
     self:start_creating_rings()
   end
 
+  game_title:update(dt)
   player:update(dt)
   oxygen_level:update(dt)
 
@@ -348,6 +353,7 @@ function Room1:draw()
     space_shuttle:draw()
   end
 
+  game_title:draw()
   player:draw()
   controls:draw()
   oxygen_level:draw()
@@ -390,6 +396,7 @@ function Room1:keyreleased(key)
 end
 
 function Room1:destroy()
+  game_title:destroy()
   player:destroy()
   oxygen_level:destroy()
 
