@@ -92,7 +92,8 @@ end
 function love.update(dt)
   if paused then return end
   timer:update(dt)
-  require("lurker").update()
+  -- for debugging:
+  -- require("lurker").update()
   background:update(dt)
   current_room:update(dt)
 end
