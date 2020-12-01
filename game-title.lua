@@ -9,9 +9,19 @@ function GameTitle:initialize()
   self.flicker_1 = false
   self.flicker_2 = false
   self.current_text = GAME_TITLE
+  self.has_faded_in = false
+  self.opacity = 0
+
+  -- All game titles variants are the same width so that
+  -- they overlap nicely, so any can be used here:
+  self.text_width = font:getWidth(self.current_text)
 end
 
 function GameTitle:update(dt)
+  if not self.has_faded_in then
+    self:fade_in()
+  end
+
   if not self.flicker_1 and current_game_state == game_states.level2 then
     self.flicker_1 = true
 
@@ -37,10 +47,26 @@ function GameTitle:update(dt)
 end
 
 function GameTitle:draw()
+  helpers.setColor(255, 255, 255, self.opacity)
   love.graphics.print(
     self.current_text,
     self.x,
-    self.y
+    self.y,
+    0,
+    1,
+    1,
+    self.text_width / 2
+  )
+  helpers.resetColor()
+end
+
+function GameTitle:fade_in()
+  self.has_faded_in = true
+  self.fade_in_timer = timer:tween(
+    2,
+    self,
+    { opacity = 0.3 },
+    'linear'
   )
 end
 
