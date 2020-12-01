@@ -57,7 +57,6 @@ function Player:initialize()
   self.y = (max_y + min_y) / 2 + 35
   self.angle = 0
 
-  -- TODO use polygon to improve hit box
   self.shape = collider:rectangle(
     self.x,
     self.y,

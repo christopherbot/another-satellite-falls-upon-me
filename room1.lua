@@ -2,6 +2,7 @@ local class = require('libraries.middleclass')
 local GameTitle = require('game-title')
 local Player = require('player')
 local Controls = require('controls')
+local DistanceTracker = require('distance-tracker')
 local Planet = require('planet')
 local Asteroid = require('asteroid')
 local OxygenTank = require('oxygen-tank')
@@ -25,6 +26,11 @@ function Room1:initialize()
 
   controls = Controls:new()
   controls:initialize()
+
+  total_distance = 0
+  distance_tracker = DistanceTracker:new()
+  distance_tracker:initialize()
+  distance_tracker:fade_in()
 
   oxygen_level = OxygenLevel:new()
   oxygen_level:initialize()
@@ -118,6 +124,7 @@ function Room1:update(dt)
 
   game_title:update(dt)
   player:update(dt)
+  total_distance = total_distance + dt
   oxygen_level:update(dt)
 
   if self.intro_planet then
@@ -158,7 +165,7 @@ function Room1:update(dt)
         timer:after(3, function()
           player:say("Where’s all my gear?\nFinding it will make this journey easier.")
           timer:after(4, function()
-            controls:show()
+            controls:fade_in()
             player:endSpeech()
             jetpack = Jetpack:new()
             jetpack:initialize()
@@ -373,6 +380,7 @@ function Room1:draw()
   game_title:draw()
   player:draw()
   controls:draw()
+  distance_tracker:draw()
   oxygen_level:draw()
 
   if self.intro_planet then
@@ -417,6 +425,16 @@ function Room1:destroy()
   player:destroy()
   oxygen_level:destroy()
 
+  if distance_tracker then
+    distance_tracker:destroy()
+    distance_tracker = nil
+  end
+
+  if controls then
+    controls:destroy()
+    controls = nil
+  end
+
   if jetpack then
     jetpack:destroy()
     jetpack = nil
@@ -447,6 +465,7 @@ function Room1:destroy()
   self.intro_started = false
   self.level1_started = false
   self.is_shuttle_in_sight = false
+  total_distance = 0
   print('room1 destroyed')
 end
 

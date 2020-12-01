@@ -7,16 +7,16 @@ function Controls:initialize()
   self.width = arrow_keys_image:getWidth()
   self.height = arrow_keys_image:getHeight()
   self.scale = 0.8
-  self.x = love.graphics.getWidth() - 190
+  self.x = love.graphics.getWidth() - 270
   self.y = love.graphics.getHeight() - 90
-  self.is_visible = false
+  self.opacity = 0
 end
 
 function Controls:update(dt)
 end
 
 function Controls:draw()
-  if not self.is_visible then return end
+  helpers.setColor(255, 255, 255, self.opacity)
 
   love.graphics.draw(
     arrow_keys_image,
@@ -66,13 +66,20 @@ function Controls:draw()
   end
 
   love.graphics.setFont(font)
+  helpers.resetColor()
 end
 
-function Controls:show()
-  self.is_visible = true
+function Controls:fade_in()
+  self.fade_in_timer = timer:tween(
+    1,
+    self,
+    { opacity = 1 },
+    'linear'
+  )
 end
 
 function Controls:destroy()
+  helpers.cancelTimer(self.fade_in_timer)
 end
 
 return Controls

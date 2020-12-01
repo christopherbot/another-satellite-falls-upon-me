@@ -42,6 +42,7 @@ function love.load()
   sound_image = love.graphics.newImage('images/sound.png')
   no_sound_image = love.graphics.newImage('images/no-sound.png')
   arrow_keys_image = love.graphics.newImage('images/arrow-keys.png')
+  measuring_tape_image = love.graphics.newImage('images/measuring-tape.png')
 
   -- settings
   love.window.setMode(1130, 640)

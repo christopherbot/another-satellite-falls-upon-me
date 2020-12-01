@@ -11,6 +11,7 @@ Images made by [N2D](https://norma-2d.itch.io/celestial-objects-pixel-art-pack).
 Icons made by
 [Smashicons](https://www.flaticon.com/authors/smashicons),
 [Pixel perfect](https://www.flaticon.com/authors/pixel-perfect),
-[Freepik](https://www.flaticon.com/authors/freepik), and
+[Freepik](https://www.flaticon.com/authors/freepik),
+[Nhor Phai](https://www.flaticon.com/free-icon/measuring_2589646?related_item_id=2589526&term=measure), and
 [smalllikeart](https://www.flaticon.com/authors/smalllikeart)
 from [www.flaticon.com](https://www.flaticon.com/).
