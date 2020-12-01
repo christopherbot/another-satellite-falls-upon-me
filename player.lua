@@ -230,6 +230,14 @@ function Player:draw()
     helpers.setColor(245, 170, 60, 1)
   end
 
+  if self.has_control and math.floor(self.boost_distance) > 0 then
+    love.graphics.print(
+      math.floor(self.boost_distance),
+      self.x + (self.width * player_scale / 2) - 10,
+      self.y + (self.height * player_scale / 2) - 10
+    )
+  end
+
   love.graphics.draw(
     self.current_image,
     self.x,
