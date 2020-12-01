@@ -251,11 +251,11 @@ function Room1:update(dt)
       space_shuttle:stop_moving()
 
       player:move_to({
-        x = space_shuttle.x - 200,
+        x = space_shuttle.x - 270,
         y = space_shuttle.y - 20,
         duration = 2,
       }, function()
-        player:say("Nobodies here…")
+        player:say("Nobodies here...")
         self.moving_around_shuttle_timer = timer:after(3, function()
           player:endSpeech()
           player:move_to({
@@ -263,7 +263,7 @@ function Room1:update(dt)
             y = space_shuttle.y + 150,
             duration = 3,
           }, function()
-            player:say("…")
+            player:say("...")
             self.moving_around_shuttle_timer = timer:after(1, function()
               player:endSpeech()
               player:move_to({
@@ -271,11 +271,11 @@ function Room1:update(dt)
                 y = space_shuttle.y,
                 duration = 3,
               }, function()
-                player:say("I guess I’ll just keep going…")
+                player:say("I guess I’ll just keep going...")
                 space_shuttle:increase_speed()
                 space_shuttle:start_moving()
                 self.moving_around_shuttle_timer = timer:after(2, function()
-                  player:say("…")
+                  player:say("...")
                   player:move_to({
                     x = 150,
                     y = love.graphics.getHeight() / 2,

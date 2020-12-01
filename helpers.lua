@@ -48,6 +48,11 @@ function helpers.printPairs(tab)
   for key, values in pairs(tab) do print(key, values) end
 end
 
+function helpers.print_ipairs(tab)
+  if type(tab) ~= 'table' then return end
+  for key, values in ipairs(tab) do print(key, values) end
+end
+
 -- pass as callback to imageData:mapPixel
 function helpers.brightenImage(x, y, r, g, b, a)
   r = math.min(r * 3, 1)

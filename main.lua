@@ -37,7 +37,7 @@ GAME_TITLE       = 'Another Satellite Falls Upon Me'
 GAME_TITLE_ALT_1 = ' not               al     on  e'
 GAME_TITLE_ALT_2 = '         a  ll     al     on  e'
 
-local Menu = require('menu')
+local Title = require('title')
 local Room1 = require('room1')
 local Room2 = require('room2')
 
@@ -52,14 +52,9 @@ game_states = {
   neverending = 'neverending',
 }
 
-local ROOMS = { Menu, Room1, Room2 }
+local ROOMS = { Title, Room1, Room2 }
 
 function love.load()
-  -- audio
-  music = love.audio.newSource('sound/into-space.ogg', 'stream')
-  music:setLooping(true)
-  music:play()
-
   -- images
   tile_sheet = love.graphics.newImage('images/background-tile-sheet.png')
   tile_sheet_frames = 4
@@ -89,6 +84,16 @@ function love.load()
   current_room_index = 1
   current_room = ROOMS[current_room_index]
   current_room:initialize()
+
+  -- fonts
+  font = love.graphics.newFont('fonts/Share-TechMono.ttf', 20)
+  love.graphics.setFont(font)
+
+  -- audio
+  music = love.audio.newSource('sound/into-space.ogg', 'stream')
+  music:setLooping(true)
+  music:play()
+  audio_enabled = true
 end
 
 function love.update(dt)
@@ -102,6 +107,11 @@ function love.draw()
 end
 
 function love.keypressed(key)
+  if key == 'm' then
+    audio_enabled = not audio_enabled
+    love.audio.setVolume(audio_enabled and 1 or 0)
+  end
+
   local next_room
   if key == 'escape' then
     current_game_state = game_states.intro

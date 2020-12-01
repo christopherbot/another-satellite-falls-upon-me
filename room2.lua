@@ -26,7 +26,7 @@ function Room2:update(dt)
     -- })
     _player.x = _space_shuttle.x + 90
     _player.y = _space_shuttle.y
-    _player:say("Nobodies here…")
+    _player:say("Nobodies here...")
   end
   _space_shuttle:update(dt)
 end
