@@ -15,3 +15,5 @@ Icons made by
 [Nhor Phai](https://www.flaticon.com/free-icon/measuring_2589646?related_item_id=2589526&term=measure), and
 [smalllikeart](https://www.flaticon.com/authors/smalllikeart)
 from [www.flaticon.com](https://www.flaticon.com/).
+
+Sound effects from [Mixkit][https://mixkit.co/].
