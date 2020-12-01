@@ -8,6 +8,7 @@ GAME_TITLE_ALT_2 = '         a  ll     al     on  e'
 local helpers = require('helpers')
 local Title = require('title')
 local Room1 = require('room1')
+local Background = require('background')
 local SoundIcon = require('sound-icon')
 
 game_states = {
@@ -51,6 +52,10 @@ function love.load()
   current_room:initialize()
   paused = false
 
+  -- background for all rooms
+  background = Background:new()
+  background:initialize()
+
   -- fonts
   font = love.graphics.newFont('fonts/Share-TechMono.ttf', 20)
   love.graphics.setFont(font)
@@ -68,12 +73,14 @@ function love.update(dt)
   if paused then return end
   timer:update(dt)
   require("lurker").update()
+  background:update(dt)
   current_room:update(dt)
 end
 
 function love.draw()
   -- only dim the background, not the pause menu or sound icon
   if paused then helpers.setColor(255, 255, 255, 0.6) end
+  background:draw()
   current_room:draw()
   if paused then helpers.resetColor() end
 

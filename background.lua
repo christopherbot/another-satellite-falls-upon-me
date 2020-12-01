@@ -35,7 +35,7 @@ function Background:update(dt)
   self.tile_x = self.tile_x - tile_speed_x
   if self.tile_x <= -self.tile_width then self.tile_x = 0 end
 
-  self.tile_y = self.tile_y - player.angle / 100
+  self.tile_y = self.tile_y - (player or { angle = 0 }).angle / 100
   if self.tile_y <= -self.tile_height then self.tile_y = 0 end
   if self.tile_y >= self.tile_height then self.tile_y = 0 end
 

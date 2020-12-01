@@ -1,5 +1,4 @@
 local class = require('libraries.middleclass')
-local Background = require('background')
 local Player = require('player')
 local Ring = require('ring')
 local Asteroid = require('asteroid')
@@ -15,9 +14,6 @@ local Room1 = class('Room1')
 function Room1:initialize()
   print('room1 initialized')
   collider = HC(100)
-
-  background = Background:new()
-  background:initialize()
 
   player = Player:new()
   player:initialize()
@@ -107,7 +103,6 @@ function Room1:update(dt)
     self:start_creating_rings()
   end
 
-  background:update(dt)
   player:update(dt)
   oxygen_level:update(dt)
 
@@ -345,8 +340,6 @@ function Room1:update(dt)
 end
 
 function Room1:draw()
-  background:draw()
-
   if space_shuttle then
     space_shuttle:draw()
   end
